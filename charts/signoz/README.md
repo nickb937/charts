@@ -71,7 +71,7 @@ The following table lists the configurable parameters of the `signoz` chart and 
 | `queryService.name`                      | Query Service component name                                            | `query-service`                   |
 | `queryService.image.registry`            | Query Service image registry name                                       | `docker.io`                       |
 | `queryService.image.repository`          | Container image name                                                    | `signoz/query-service`            |
-| `queryService.image.tag`                 | Container image tag                                                     | `0.9.2`                           |
+| `queryService.image.tag`                 | Container image tag                                                     | `0.17.0`                          |
 | `queryService.image.pullPolicy`          | Container pull policy                                                   | `IfNotPresent`                    |
 | `queryService.replicaCount`              | Number of query-service nodes                                           | `1`                               |
 | `queryService.initContainers.init.enabled`      | Query Service initContainer enabled                              | `true`                            |
@@ -80,6 +80,7 @@ The following table lists the configurable parameters of the `signoz` chart and 
 | `queryService.initContainers.init.image.tag`        | Query Service initContainer image tag                        | `1.35`                            |
 | `queryService.initContainers.init.image.pullPolicy` | Query Service initContainer pull policy                      | `IfNotPresent`                    |
 | `queryService.initContainers.init.command`      | Query Service initContainer command line to execute              | See `values.yaml` for defaults    |
+| `queryService.initContainers.init.resources`    | Resources requests and limits                                    | See `values.yaml` for defaults |
 | `queryService.configVars`                | Query Service configurations                                            | See `values.yaml` for defaults    |
 | `queryService.imagePullSecrets`          | Reference to secrets to be used when pulling images                     | `[]`                              |
 | `queryService.serviceAccount.create`     | Service account for query-service nodes enabled                         | `true`                            |
@@ -88,6 +89,7 @@ The following table lists the configurable parameters of the `signoz` chart and 
 | `queryService.resources`                 | Resources requests and limits                                           | See `values.yaml` for defaults    |
 | `queryService.podSecurityContext`        | Pods security context                                                   | `{}`                              |
 | `queryService.securityContext`           | Security context for query-service node                                 | `{}`                              |
+| `queryService.service.annotations`       | Service annotations                                                     | `{}`                              |
 | `queryService.service.type`              | Query Service service type                                              | `ClusterIP`                       |
 | `queryService.service.port`              | Query Service service port                                              | `8080`                            |
 | `queryService.service.internalPort`      | Query Service service internal port                                     | `8085`                            |
@@ -102,7 +104,7 @@ The following table lists the configurable parameters of the `signoz` chart and 
 | `frontend.name`                          | Frontend component name                                                 | `frontend`                        |
 | `frontend.image.registry`                | Frontend image registry name                                            | `docker.io`                       |
 | `frontend.image.repository`              | Container image name                                                    | `signoz/frontend`                 |
-| `frontend.image.tag`                     | Container image tag                                                     | `0.9.2`                           |
+| `frontend.image.tag`                     | Container image tag                                                     | `0.17.0`                          |
 | `frontend.image.pullPolicy`              | Container pull policy                                                   | `IfNotPresent`                    |
 | `frontend.replicaCount`                  | Number of query-service nodes                                           | `1`                               |
 | `frontend.initContainers.init.enabled`   | Frontend initContainer enabled                                          | `true`                            |
@@ -111,6 +113,7 @@ The following table lists the configurable parameters of the `signoz` chart and 
 | `frontend.initContainers.init.image.tag`        | Frontend initContainer image tag                                 | `1.35`                            |
 | `frontend.initContainers.init.image.pullPolicy` | Frontend initContainer pull policy                               | `IfNotPresent`                    |
 | `frontend.initContainers.init.command`   | Frontend initContainer command line to execute                          | See `values.yaml` for defaults    |
+| `frontend.initContainers.init.resources` | Resources requests and limits                                           | See `values.yaml` for defaults    |
 | `frontend.imagePullSecrets`              | Reference to secrets to be used when pulling images                     | `[]`                              |
 | `frontend.serviceAccount.create`         | Service account for query-service nodes enabled                         | `true`                            |
 | `frontend.serviceAccount.annotations`    | Service account annotations                                             | `{}`                              |
@@ -118,6 +121,7 @@ The following table lists the configurable parameters of the `signoz` chart and 
 | `frontend.resources`                     | Resources requests and limits                                           | See `values.yaml` for defaults    |
 | `frontend.podSecurityContext`            | Pods security context                                                   | `{}`                              |
 | `frontend.securityContext`               | Security context for query-service node                                 | `{}`                              |
+| `frontend.service.annotations`           | Service annotations                                                     | `{}`                              |
 | `frontend.service.type`                  | Frontend service type                                                   | `ClusterIP`                       |
 | `frontend.service.port`                  | Frontend service port                                                   | `3301`                            |
 | `frontend.ingress.enabled`               | Frontend ingress resource enabled                                       | `false`                           |
@@ -131,11 +135,12 @@ The following table lists the configurable parameters of the `signoz` chart and 
 | `alertmanager.name`                      | Alertmanager component name                                             | `alertmanager`                    |
 | `alertmanager.image.registry`            | Alertmanager image registry name                                        | `docker.io`                       |
 | `alertmanager.image.repository`          | Container image name                                                    | `signoz/alertmanager`             |
-| `alertmanager.image.tag`                 | Container image tag                                                     | `0.23.0-0.1`                      |
+| `alertmanager.image.tag`                 | Container image tag                                                     | `0.23.0-0.2`                      |
 | `alertmanager.image.pullPolicy`          | Container pull policy                                                   | `IfNotPresent`                    |
 | `alertmanager.replicaCount`              | Number of Alertmanager nodes                                            | `1`                               |
 | `alertmanager.command`                   | Set container command to execute                                        | `[]`                              |
 | `alertmanager.extraArgs`                 | Extra arguments for the alertmanager container                          | `{}`                              |
+| `alertmanager.initContainers.init.resources` | Resources requests and limits                                       | See `values.yaml` for defaults |
 | `alertmanager.imagePullSecrets`          | Reference to secrets to be used when pulling images                     | `[]`                              |
 | `alertmanager.service.annotations`       | Service annotations                                                     | `{}`                              |
 | `alertmanager.service.type`              | Alertmanager service type                                               | `ClusterIP`                       |
@@ -170,11 +175,12 @@ The following table lists the configurable parameters of the `signoz` chart and 
 | `alertmanager.templates`                 | Set alert templates                                                     | See `values.yaml` for defaults    |
 | `otelCollector.name`                     | Otel Collector component name                                           | `otel-collector`                  |
 | `otelCollector.image.registry`           | Otel Collector image registry name                                      | `docker.io`                       |
-| `otelCollector.image.repository`         | Container image name                                                    | `signoz/query-service`            |
-| `otelCollector.image.tag`                | Container image tag                                                     | `0.45.1-1.0`                      |
+| `otelCollector.image.repository`         | Container image name                                                    | `signoz/signoz-otel-collector`    |
+| `otelCollector.image.tag`                | Container image tag                                                     | `0.66.6`                          |
 | `otelCollector.image.pullPolicy`         | Container pull policy                                                   | `IfNotPresent`                    |
 | `otelCollector.replicaCount`             | Number of otel-collector nodes                                          | `1`                               |
-| `otelCollector.serviceType`              | Otel Collector service type                                             | `ClusterIP`                       |
+| `otelCollector.service.type`             | Otel Collector service type                                             | `ClusterIP`                       |
+| `otelCollector.service.annotations`      | Service annotations                                                     | `{}`                              |
 | `otelCollector.ports`                    | Lists of ports exposed by otel-collector service                        | See `values.yaml` for defaults    |
 | `otelCollector.initContainers.init.enabled`    | Otel Collector initContainer enabled                              | `true`                            |
 | `otelCollector.initContainers.init.image.registry`   | Otel Collector initContainer registry name                  | `docker.io`                       |
@@ -182,6 +188,7 @@ The following table lists the configurable parameters of the `signoz` chart and 
 | `otelCollector.initContainers.init.image.tag`        | Otel Collector initContainer image tag                      | `1.35`                            |
 | `otelCollector.initContainers.init.image.pullPolicy` | Otel Collector initContainer pull policy                    | `IfNotPresent`                    |
 | `otelCollector.initContainers.init.command`    | Otel Collector initContainer command line to execute              | See `values.yaml` for defaults    |
+| `otelCollector.initContainers.init.resources`  | Resources requests and limits                                     | See `values.yaml` for defaults |
 | `otelCollector.config`                         | Otel Collector configurations                                     | See `values.yaml` for defaults    |
 | `otelCollector.imagePullSecrets`               | Reference to secrets to be used when pulling images               | `[]`                              |
 | `otelCollector.serviceAccount.create`          | Service account for otel-collector nodes enabled                  | `true`                            |
@@ -195,22 +202,21 @@ The following table lists the configurable parameters of the `signoz` chart and 
 | `otelCollector.readinessProbe`           | Otel Collector readiness probes                                         | See `values.yaml` for defaults    |
 | `otelCollector.customLivenessProbe`      | Custom liveness probes (if `otelCollector.livenessProbe` not enabled)   | `{}`                              |
 | `otelCollector.customReadinessProbe`     | Custom readiness probes (if `otelCollector.readinessProbe` not enabled) | `{}`                              |
-| `otelCollector.ingress.enabled`           | Open Telemetry Collector ingress resource enabled                      | `false`                           |
-| `otelCollector.ingress.className`         | Open Telemetry Collector ingress class name                            | `""`                              |
-| `otelCollector.ingress.hosts`             | Open Telemetry Collector ingress virtual hosts                         | See `values.yaml` for defaults    |
-| `otelCollector.ingress.annotations`       | Open Telemetry Collector ingress annotations                           | `{}`                              |
-| `otelCollector.ingress.tls`               | Open Telemetry Collector ingress TLS settings                          | `[]`                              |
+| `otelCollector.ingress.enabled`          | Open Telemetry Collector ingress resource enabled                       | `false`                           |
+| `otelCollector.ingress.className`        | Open Telemetry Collector ingress class name                             | `""`                              |
+| `otelCollector.ingress.hosts`            | Open Telemetry Collector ingress virtual hosts                          | See `values.yaml` for defaults    |
+| `otelCollector.ingress.annotations`      | Open Telemetry Collector ingress annotations                            | `{}`                              |
+| `otelCollector.ingress.tls`              | Open Telemetry Collector ingress TLS settings                           | `[]`                              |
 | `otelCollector.podSecurityContext`       | Pods security context                                                   | `{}`                              |
 | `otelCollector.minReadySeconds`          | Minimum seconds for otel-collector pod to be ready without crashing     | `300`                             |
-| `otelCollector.progressDeadlineSeconds`  | Seconds to wait for the deployment to progress before fail reporting    | `120`                             |
-| `otelCollector.ballastSizeMib`           | Ballast memory size in Mib                                              | `683`                             |
 | `otelCollectorMetrics.name`              | Otel Collector Metrics component name                                   | `otel-collector-metrics`          |
 | `otelCollectorMetrics.image.registry`    | Otel Collector Metrics image registry name                              | `docker.io`                       |
-| `otelCollectorMetrics.image.repository`  | Container image name                                                    | `signoz/otelcontribcol`           |
-| `otelCollectorMetrics.image.tag`         | Container image tag                                                     | `0.45.1-1.0`                      |
+| `otelCollectorMetrics.image.repository`  | Container image name                                                    | `signoz/signoz-otel-collector`    |
+| `otelCollectorMetrics.image.tag`         | Container image tag                                                     | `0.66.6`                          |
 | `otelCollectorMetrics.image.pullPolicy`  | Container pull policy                                                   | `IfNotPresent`                    |
 | `otelCollectorMetrics.replicaCount`      | Number of otel-collector-metrics nodes                                  | `1`                               |
-| `otelCollectorMetrics.serviceType`       | Otel Collector service metrics type                                     | `ClusterIP`                       |
+| `otelCollectorMetrics.service.type`         | Otel Collector service type                                          | `ClusterIP`                       |
+| `otelCollectorMetrics.service.annotations`  | Service annotations                                                  | `{}`                              |
 | `otelCollectorMetrics.ports`                    | Lists of ports exposed by otel-collector-metrics service         | See `values.yaml` for defaults    |
 | `otelCollectorMetrics.initContainers.init.enabled`    | Otel Collector Metrics initContainer enabled               | `true`                            |
 | `otelCollectorMetrics.initContainers.init.image.registry`    | Otel Collector Metrics initContainer registry name  | `docker.io`                       |
@@ -218,6 +224,7 @@ The following table lists the configurable parameters of the `signoz` chart and 
 | `otelCollectorMetrics.initContainers.init.image.tag`         | Otel Collector Metrics initContainer image tag      | `1.35`                            |
 | `otelCollectorMetrics.initContainers.init.image.pullPolicy`  | Otel Collector Metrics initContainer pull policy    | `IfNotPresent`                    |
 | `otelCollectorMetrics.initContainers.init.command`  | Otel Collector Metrics initContainer command line to execute | See `values.yaml` for defaults    |
+| `otelCollectorMetrics.initContainers.init.resources`| Resources requests and limits                                | See `values.yaml` for defaults |
 | `otelCollectorMetrics.config`            | Otel Collector Metrics configurations                                   | See `values.yaml` for defaults    |
 | `otelCollectorMetrics.imagePullSecrets`  | Reference to secrets to be used when pulling images                     | `[]`                              |
 | `otelCollectorMetrics.serviceAccount.create`        | Service account for otel-collector-metrics nodes enabled     | `true`                            |
@@ -231,11 +238,10 @@ The following table lists the configurable parameters of the `signoz` chart and 
 | `otelCollectorMetrics.readinessProbe`    | Otel Collector Metrics readiness probes                                 | See `values.yaml` for defaults    |
 | `otelCollectorMetrics.customLivenessProbe`    | Custom liveness probes (if `otelCollectorMetrics.livenessProbe` not enabled)   | `{}`                  |
 | `otelCollectorMetrics.customReadinessProbe`   | Custom readiness probes (if `otelCollectorMetrics.readinessProbe` not enabled) | `{}`                  |
-| `otelCollectorMetrics.ingress.enabled`           | Open Telemetry Collector Metrics ingress resource enabled                      | `false`                           |
-| `otelCollectorMetrics.ingress.className`         | Open Telemetry Collector Metrics ingress class name                            | `""`                              |
-| `otelCollectorMetrics.ingress.hosts`             | Open Telemetry Collector Metrics ingress virtual hosts                         | See `values.yaml` for defaults    |
-| `otelCollectorMetrics.ingress.annotations`       | Open Telemetry Collector Metrics ingress annotations                           | `{}`                              |
-| `otelCollectorMetrics.ingress.tls`               | Open Telemetry Collector Metrics ingress TLS settings                          | `[]`                              |
-| `otelCollectorMetrics.minReadySeconds`          | Minimum seconds for otel-collector-metrics pod to be ready without crashing  | `300`                 |
+| `otelCollectorMetrics.ingress.enabled`        | Open Telemetry Collector Metrics ingress resource enabled          | `false`                           |
+| `otelCollectorMetrics.ingress.className`      | Open Telemetry Collector Metrics ingress class name                | `""`                              |
+| `otelCollectorMetrics.ingress.hosts`          | Open Telemetry Collector Metrics ingress virtual hosts             | See `values.yaml` for defaults    |
+| `otelCollectorMetrics.ingress.annotations`    | Open Telemetry Collector Metrics ingress annotations               | `{}`                              |
+| `otelCollectorMetrics.ingress.tls`            | Open Telemetry Collector Metrics ingress TLS settings              | `[]`                              |
+| `otelCollectorMetrics.minReadySeconds`        | Minimum seconds for otel-collector-metrics pod to be ready without crashing  | `300`                   |
 | `otelCollectorMetrics.progressDeadlineSeconds`  | Seconds to wait for the deployment to progress before fail reporting   | `120`                       |
-| `otelCollectorMetrics.ballastSizeMib`           | Ballast memory size in Mib                                             | `683`                       |

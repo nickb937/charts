@@ -1,6 +1,6 @@
 # Template Parameters:
 #
-# NAMESPACE=platform
+# NAMESPACE={{ include "clickhouse.namespace" . }}
 # COMMENT=
 #
 # Setup ClusterIP Service to provide monitoring metrics for Prometheus
@@ -11,14 +11,20 @@
 kind: Service
 apiVersion: v1
 metadata:
-  name: clickhouse-operator-metrics
-  namespace: {{ .Values.namespace | default .Release.Namespace }}
+  name: {{ include "clickhouseOperator.fullname" . }}-metrics
+  namespace: {{ include "clickhouse.namespace" . }}
   labels:
-    clickhouse.altinity.com/chop: 0.18.4
-    app: clickhouse-operator
+    {{- include "clickhouseOperator.labels" . | nindent 4 }}
+{{- with .Values.clickhouseOperator.metricsExporter.service }}
+  {{- if .annotations }}
+  annotations:
+    {{- toYaml .annotations | nindent 4 }}
+  {{- end }}
 spec:
+  type: {{ .type }}
   ports:
-    - port: 8888
-      name: clickhouse-operator-metrics
+    - port: {{ .port }}
+      name: {{ include "clickhouseOperator.fullname" $ }}-metrics
   selector:
-    app: clickhouse-operator
+    {{- include "clickhouseOperator.selectorLabels" $ | nindent 4 }}
+{{- end }}

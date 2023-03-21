@@ -4,16 +4,30 @@ metadata:
   name: {{ include "queryService.fullname" . }}
   labels:
     {{- include "queryService.labels" . | nindent 4 }}
+{{- with .Values.queryService.service }}
+{{- if .annotations }}
+  annotations:
+    {{- toYaml .annotations | nindent 4 }}
+{{- end }}
 spec:
-  type: {{ .Values.queryService.service.type }}
+  type: {{ .type }}
   ports:
-    - port: {{ .Values.queryService.service.port }}
-      targetPort: http
+    - name: http
+      port: {{ .port }}
+      {{- include "signoz.service.ifClusterIP" .type | indent 6 }}
       protocol: TCP
-      name: http
-    - port: {{ .Values.queryService.service.internalPort }}
       targetPort: http
+      {{- if (and (eq .type "NodePort") .nodePort) }}
+      nodePort: {{ .nodePort }}
+      {{- end }}
+    - name: http-internal
+      port: {{ .internalPort }}
+      {{- include "signoz.service.ifClusterIP" .type | indent 6 }}
       protocol: TCP
-      name: http-internal
+      targetPort: http-internal
+      {{- if (and (eq .type "NodePort") .internalNodePort) }}
+      nodePort: {{ .internalNodePort }}
+      {{- end }}
+{{- end }}
   selector:
     {{- include "queryService.selectorLabels" . | nindent 4 }}

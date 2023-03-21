@@ -4,20 +4,23 @@ metadata:
   name: {{ include "alertmanager.fullname" . }}
   labels:
     {{- include "alertmanager.labels" . | nindent 4 }}
-{{- if .Values.alertmanager.service.annotations }}
+{{- with .Values.alertmanager.service }}
+{{- if .annotations }}
   annotations:
-    {{- toYaml .Values.alertmanager.service.annotations | nindent 4 }}
+    {{- toYaml .annotations | nindent 4 }}
 {{- end }}
 spec:
-  type: {{ .Values.alertmanager.service.type }}
+  type: {{ .type }}
   ports:
-    - port: {{ .Values.alertmanager.service.port }}
+    - port: {{ .port }}
+      {{- include "signoz.service.ifClusterIP" .type | nindent 6 }}
       targetPort: http
       protocol: TCP
       name: http
-      {{- if (and (eq .Values.alertmanager.service.type "NodePort") .Values.alertmanager.service.nodePort) }}
-      nodePort: {{ .Values.alertmanager.service.nodePort }}
+      {{- if (and (eq .type "NodePort") .nodePort) }}
+      nodePort: {{ .nodePort }}
       {{- end }}
+{{- end }}
   selector:
     {{- include "alertmanager.selectorLabels" . | nindent 4 }}
 ---
@@ -29,20 +32,22 @@ metadata:
     {{- include "alertmanager.labels" . | nindent 4 }}
 spec:
   clusterIP: None
+{{- with .Values.alertmanager }}
   ports:
-    - port: {{ .Values.alertmanager.service.port }}
+    - port: {{ .service.port }}
       targetPort: http
       protocol: TCP
       name: http
-    {{- if or (gt (int .Values.alertmanager.replicaCount) 1) (.Values.alertmanager.additionalPeers) }}
-    - port: 9094
-      targetPort: 9094
+    {{- if or (gt (int .replicaCount) 1) (.additionalPeers) }}
+    - port: {{ .service.clusterPort }}
+      targetPort: {{ .service.clusterPort }}
       protocol: TCP
       name: cluster-tcp
-    - port: 9094
-      targetPort: 9094
+    - port: {{ .service.clusterPort }}
+      targetPort: {{ .service.clusterPort }}
       protocol: UDP
       name: cluster-udp
     {{- end }}
+{{- end }}
   selector:
     {{- include "alertmanager.selectorLabels" . | nindent 4 }}
